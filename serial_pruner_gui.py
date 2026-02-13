@@ -14,7 +14,13 @@ def prune_serials():
     raw_input = input_text.get("1.0", tk.END)
     raw_list = re.split(r'[,\n;]+', raw_input)
     cleaned = [extract_useful_number(s.strip()) for s in raw_list]
-    cleaned = sorted(set(filter(None, cleaned)))
+    cleaned = list(filter(None, cleaned))
+    if preserve_order_var.get():
+        # Keep first occurrence order while removing duplicates
+        seen = set()
+        cleaned = [s for s in cleaned if not (s in seen or seen.add(s))]
+    else:
+        cleaned = sorted(set(cleaned))
     result_text.delete("1.0", tk.END)
     result_text.insert(tk.END, "\n".join(cleaned))
 
@@ -26,6 +32,9 @@ window.geometry("600x400")
 tk.Label(window, text="Paste Serial Numbers:").pack()
 input_text = scrolledtext.ScrolledText(window, height=8, wrap=tk.WORD)
 input_text.pack(fill="both", padx=10, pady=5)
+
+preserve_order_var = tk.BooleanVar(value=False)
+tk.Checkbutton(window, text="Preserve input order (no alphabetical sort)", variable=preserve_order_var).pack()
 
 tk.Button(window, text="Prune and Sort", command=prune_serials).pack(pady=10)
 

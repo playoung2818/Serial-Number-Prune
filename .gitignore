@@ -1,0 +1,14 @@
+/build/
+/dist/
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+*.idb
+*.ipdb
+*.iobj
+*.exp
+*.lib
+.vs/
